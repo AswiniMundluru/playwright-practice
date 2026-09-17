@@ -21,8 +21,18 @@ for (const data of logindata)
     await page.goto("https://tutorialsninja.com/demo/index.php?route=account/register");
     await page.getByPlaceholder("First Name").fill(data.firstName);
     await page.getByPlaceholder("Last Name").fill(data.lastName);
-    
+    await page.getByPlaceholder("E-Mail").fill(data.email);
+    await page.getByPlaceholder("Telephone").fill(data.telephone);
 
+    if( data.subscribeNewsLetter === "YES"){
+
+    await page.getByRole("radio", { name: "Yes"}).click();
+    }
+
+    else {
+
+        await page.getByRole("radio", { name: "NO"}).click();
+    }
 
  });
 
