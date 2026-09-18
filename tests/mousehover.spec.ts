@@ -1,40 +1,35 @@
-import { Page,expect, test , Locator, chromium} from "@playwright/test"
+import { test, expect, chromium } from "@playwright/test";
 
-test ( "mouse hover test" , async()=>{
+test("mouse hover test using try catch", async () => {
+  const browser = await chromium.launch({ headless: false });
+  const context = await browser.newContext();
+  const parentpage = await context.newPage();
 
-    const broswer = await chromium.launch();
-    const browsercontext = await broswer.newContext();
-    const parentpage = await browsercontext.newPage();
+  await parentpage.goto("https://www.spicejet.com/", { waitUntil: "domcontentloaded" });
 
-await parentpage.goto("https://www.spicejet.com/");
-await parentpage.getByText("Add-ons",{ exact: true}).first().hover();
-await parentpage.getByText("SpiceAssurance").click();
+  const addons = parentpage.getByText("Add-ons", { exact: true }).first();
+  await addons.waitFor({ state: "visible" });
+  await addons.hover();
 
-try {//same page
+  // 1. Start listening BEFORE clicking (No .catch() wrapper)
+  const newPagePromise = context.waitForEvent("page");
 
-    await parentpage.waitForURL("/SpiceAssurance/");
-    await expect(parentpage).toHaveURL("/SpiceAssurance/");
-}
+  // 2. Perform the click
+  await parentpage.getByText("SpiceAssurance").first().click();
 
-catch{
-//new page
+  try {
+    // 3. Try same-page navigation with a short timeout
+    await parentpage.waitForURL(/SpiceAssurance/, { timeout: 2000 });
+    console.log("Navigated on the same page");
+  } catch {
+    // 4. Execution enters here when same-page fails
+    // Await the popup promise that was triggered during the click
+    const newpage = await newPagePromise;
 
-const allpages =  browsercontext.pages();
+    await expect(newpage).toHaveURL(/SpiceAssurance/);
+    console.log("Opened in a new page successfully");
+  }
 
-for( const newpage of allpages){
-
-    const otherpage =  newpage.url();
-
-
-    if( newpage!==parentpage &&  otherpage.includes("SpiceAssurance"))
-        {
-
-        console.log("newpage opened");
-
-    }
-}
-
-
-}
+  await browser.close();
 
 });
