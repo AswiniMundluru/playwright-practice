@@ -7,9 +7,8 @@ test("mouse hover test using try catch", async () => {
 
   await parentpage.goto("https://www.spicejet.com/", { waitUntil: "domcontentloaded" });
 
-  const addons = parentpage.getByText("Add-ons", { exact: true }).first();
-  await addons.waitFor({ state: "visible" });
-  await addons.hover();
+  await parentpage.getByText("Add-ons", { exact: true }).first().hover();
+  
 
   // 1. Start listening BEFORE clicking (No .catch() wrapper)
   const newPagePromise = context.waitForEvent("page");
