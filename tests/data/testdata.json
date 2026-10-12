@@ -1,0 +1,29 @@
+[
+  {
+    "firstName":"Alice",
+    "lastName":"Smith",
+    "email":"alicega@gmail.com",
+    "telephone":"123456677",
+    "password":"Passwrd@123",
+    "subscribeNewsLetter":"yes"
+  },
+
+   {
+    "firstName":"Bob",
+    "lastName":"jones",
+    "email":"alic@gmail.com",
+    "telephone":"123477",
+    "password":"Pa@123",
+    "subscribeNewsLetter":"No"
+  },
+   {
+
+    "firstName":"Madhu",
+    "lastName":"automation",
+    "email":"ali@gmail.com",
+    "telephone":"1277",
+    "password":"Priya@123",
+    "subscribeNewsLetter":"No"
+  }
+
+]
